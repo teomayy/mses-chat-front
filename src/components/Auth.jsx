@@ -48,7 +48,7 @@ const Auth = () => {
 		e.preventDefault()
 		const { username, password, phoneNumber } = form
 
-		const URL = 'https://mses-chat.uz:8444:/auth'
+		const URL = 'http://localhost:8444/auth'
 
 		try {
 			const response = await axios.post(
@@ -83,7 +83,7 @@ const Auth = () => {
 
 	const handleSendOtp = async () => {
 		try {
-			const res = await axios.post('https://mses-chat.uz:8444/auth/send-otp', {
+			const res = await axios.post('http://localhost:8444/auth/send-otp', {
 				phoneNumber: form.phoneNumber,
 			})
 
@@ -99,7 +99,7 @@ const Auth = () => {
 	const handleSendResetOtp = async () => {
 		try {
 			const res = await axios.post(
-				'https://mses-chat.uz:8444/auth/send-reset-otp',
+				'http://localhost:8444/auth/send-reset-otp',
 				{
 					phoneNumber: form.phoneNumber,
 				}
@@ -115,15 +115,16 @@ const Auth = () => {
 	}
 
 	const handleVerifyOtp = async () => {
+		console.log('Before sending request')
 		try {
 			const response = await axios.post(
-				'https://mses-chat.uz:8444/auth/verify-otp',
+				'http://localhost:8444/auth/verify-otp',
 				{
 					phoneNumber: form.phoneNumber,
 					otp,
 				}
 			)
-
+			console.log('After sending request')
 			if (response.data.success) {
 				setIsVerified(true)
 			} else {
@@ -137,7 +138,7 @@ const Auth = () => {
 	const handleResetPassword = async () => {
 		try {
 			const response = await axios.post(
-				'https://mses-chat.uz:8444/auth/reset-password',
+				'http://localhost:8444/auth/reset-password',
 				{
 					phoneNumber: form.phoneNumber,
 					otp,
@@ -190,7 +191,7 @@ const Auth = () => {
 									</div>
 								) : (
 									<div className='auth__form-container_fields-content_input'>
-										<label htmlFor='otp'>Код подтверждение</label>
+										<label htmlFor='otp'>Код подтверждения</label>
 										<input
 											type='text'
 											id='otp'
@@ -225,7 +226,7 @@ const Auth = () => {
 								) : (
 									<>
 										<div className='auth__form-container_fields-content_input'>
-											<label htmlFor='otp'>Код подтверждение</label>
+											<label htmlFor='otp'>Код подтверждения</label>
 											<input
 												type='text'
 												id='otp'

@@ -424,6 +424,10 @@ body {
 	background-color: transparent !important;
 }
 
+.channel-list__container-responsive .str-chat__channel-list {
+	background-color: transparent !important;
+}
+
 .icon1__inner {
 	font-family: Helvetica Neue, sans-serif;
 	height: 100%;
@@ -1973,7 +1977,7 @@ div.rta__autocomplete.str-chat__emojisearch {
 	display: none;
 }
 
-.channerl-list__container-toggle {
+.channel-list__container-toggle {
 	display: none;
 	height: 50px;
 	width: 50px;
@@ -2044,7 +2048,7 @@ div.rta__autocomplete.str-chat__emojisearch {
 		width: 100%;
 	}
 
-	.channerl-list__container-toggle {
+	.channel-list__container-toggle {
 		display: flex;
 	}
 
@@ -2079,7 +2083,7 @@ div.rta__autocomplete.str-chat__emojisearch {
 		width: 150px;
 	}
 
-	.channerl-list__container-toggle {
+	.channel-list__container-toggle {
 		right: -5%;
 	}
 }
