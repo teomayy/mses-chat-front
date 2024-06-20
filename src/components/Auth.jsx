@@ -48,7 +48,7 @@ const Auth = () => {
 		e.preventDefault()
 		const { username, password, phoneNumber } = form
 
-		const URL = 'https://localhost:5000/auth'
+		const URL = 'https://localhost:8444/auth'
 
 		try {
 			const response = await axios.post(
@@ -83,7 +83,7 @@ const Auth = () => {
 
 	const handleSendOtp = async () => {
 		try {
-			const res = await axios.post('https://localhost:5000/auth/send-otp', {
+			const res = await axios.post('https://localhost:8444/auth/send-otp', {
 				phoneNumber: form.phoneNumber,
 			})
 
@@ -99,7 +99,7 @@ const Auth = () => {
 	const handleSendResetOtp = async () => {
 		try {
 			const res = await axios.post(
-				'https://localhost:5000/auth/send-reset-otp',
+				'https://localhost:8444/auth/send-reset-otp',
 				{
 					phoneNumber: form.phoneNumber,
 				}
@@ -117,7 +117,7 @@ const Auth = () => {
 	const handleVerifyOtp = async () => {
 		try {
 			const response = await axios.post(
-				'https://localhost:5000/auth/verify-otp',
+				'https://localhost:8444/auth/verify-otp',
 				{
 					phoneNumber: form.phoneNumber,
 					otp,
@@ -137,7 +137,7 @@ const Auth = () => {
 	const handleResetPassword = async () => {
 		try {
 			const response = await axios.post(
-				'https://localhost:5000/auth/reset-password',
+				'https://localhost:8444/auth/reset-password',
 				{
 					phoneNumber: form.phoneNumber,
 					otp,
