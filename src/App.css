@@ -150,6 +150,7 @@ body {
 }
 
 .auth__form-container_fields-account span {
+	margin-left: 5px;
 	color: #05245a;
 	cursor: pointer;
 	font-weight: 700;
@@ -656,6 +657,20 @@ body {
 	top: 4px;
 }
 
+.error-message {
+	color: red;
+	margin-bottom: 10px;
+}
+.forgot_password-content {
+	display: flex;
+	text-align: center;
+	align-items: center;
+	justify-content: center;
+}
+.forgot_password {
+	cursor: pointer;
+	font-size: 20px;
+}
 .custom-file-upload {
 	display: inline-block;
 	padding: 6px 12px;

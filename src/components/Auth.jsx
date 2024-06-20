@@ -15,15 +15,29 @@ const initialState = {
 const Auth = () => {
 	const [form, setForm] = useState(initialState)
 	const [isSignup, setIsSignup] = useState(false)
+	const [isResetPassword, setIsResetPassword] = useState(false)
 	const [otp, setOtp] = useState('')
+	const [newPassword, setNewPassword] = useState('')
 	const [isOtpSent, setIsOtpSent] = useState(false)
 	const [isVerified, setIsVerified] = useState(false)
+	const [errorMessage, setErrorMessage] = useState('')
 
 	const switchMode = () => {
 		setIsSignup(prevIsSignup => !prevIsSignup)
+		setIsResetPassword(false)
 		setIsOtpSent(false)
 		setIsVerified(false)
 		setForm(initialState)
+		setErrorMessage('')
+	}
+
+	const switchToResetPassword = () => {
+		setIsResetPassword(true)
+		setIsSignup(false)
+		setIsOtpSent(false)
+		setIsVerified(false)
+		setForm(initialState)
+		setErrorMessage('')
 	}
 
 	const handleChange = e => {
@@ -59,7 +73,11 @@ const Auth = () => {
 
 			window.location.reload()
 		} catch (error) {
-			console.error('Error during authentication', error)
+			if (error.response && error.response.data) {
+				setErrorMessage(error.response.data.message)
+			} else {
+				console.error('Error during authentication', error)
+			}
 		}
 	}
 
@@ -68,6 +86,24 @@ const Auth = () => {
 			const res = await axios.post('http://localhost:5000/auth/send-otp', {
 				phoneNumber: form.phoneNumber,
 			})
+
+			if (res.data.success) {
+				setIsOtpSent(true)
+				alert('OTP sent!')
+			}
+		} catch (error) {
+			console.error('Error sending OTP', error)
+		}
+	}
+
+	const handleSendResetOtp = async () => {
+		try {
+			const res = await axios.post(
+				'http://localhost:5000/auth/send-reset-otp',
+				{
+					phoneNumber: form.phoneNumber,
+				}
+			)
 
 			if (res.data.success) {
 				setIsOtpSent(true)
@@ -98,12 +134,43 @@ const Auth = () => {
 		}
 	}
 
+	const handleResetPassword = async () => {
+		try {
+			const response = await axios.post(
+				'http://localhost:5000/auth/reset-password',
+				{
+					phoneNumber: form.phoneNumber,
+					otp,
+					newPassword,
+				}
+			)
+
+			if (response.data.success) {
+				alert('Password reset successful')
+				window.location.reload()
+			} else {
+				alert('Invalid OTP')
+			}
+		} catch (error) {
+			console.error('Error resetting password', error)
+		}
+	}
+
 	return (
 		<div className='auth__form-container'>
 			<div className='auth__form-container_fields'>
 				<div className='auth__form-container_fields-content'>
-					<p>{isSignup ? 'Регистрация' : 'Войти'}</p>
+					<p>
+						{isSignup
+							? 'Регистрация'
+							: isResetPassword
+							? 'Сброс пароля'
+							: 'Войти'}
+					</p>
 					<form onSubmit={handleSubmit}>
+						{errorMessage && (
+							<div className='error-message'>{errorMessage}</div>
+						)}
 						{isSignup && !isVerified ? (
 							<>
 								{!isOtpSent ? (
@@ -138,6 +205,51 @@ const Auth = () => {
 									</div>
 								)}
 							</>
+						) : isResetPassword ? (
+							<>
+								{!isOtpSent ? (
+									<div className='auth__form-container_fields-content_input'>
+										<label htmlFor='phoneNumber'>Номер телефона</label>
+										<CustomPhoneInput
+											value={form.phoneNumber}
+											onChange={phone =>
+												setForm({ ...form, phoneNumber: phone })
+											}
+										/>
+										<div className='auth__form-container_fields-content_button'>
+											<button type='button' onClick={handleSendResetOtp}>
+												Отправить код
+											</button>
+										</div>
+									</div>
+								) : (
+									<>
+										<div className='auth__form-container_fields-content_input'>
+											<label htmlFor='otp'>Код подтверждение</label>
+											<input
+												type='text'
+												id='otp'
+												value={otp}
+												onChange={e => setOtp(e.target.value)}
+											/>
+										</div>
+										<div className='auth__form-container_fields-content_input'>
+											<label htmlFor='newPassword'>Новый пароль</label>
+											<input
+												type='password'
+												id='newPassword'
+												value={newPassword}
+												onChange={e => setNewPassword(e.target.value)}
+											/>
+										</div>
+										<div className='auth__form-container_fields-content_button'>
+											<button type='button' onClick={handleResetPassword}>
+												Сбросить пароль
+											</button>
+										</div>
+									</>
+								)}
+							</>
 						) : (
 							<>
 								<div className='auth__form-container_fields-content_input'>
@@ -165,17 +277,31 @@ const Auth = () => {
 										{isSignup ? 'Регистрация' : 'Войти'}
 									</button>
 								</div>
+								<div className='auth__form-container_fields-account'>
+									<p>
+										{isSignup
+											? 'Уже есть аккаунт?'
+											: 'У вас нет учетной записи?'}
+										<span onClick={switchMode}>
+											{isSignup ? 'Войти' : 'Регистрация'}
+										</span>
+									</p>
+								</div>
+								<div className='forgot_password-content'>
+									{!isSignup && (
+										<p>
+											<span
+												className='forgot_password'
+												onClick={switchToResetPassword}
+											>
+												Забыли пароль?
+											</span>
+										</p>
+									)}
+								</div>
 							</>
 						)}
 					</form>
-					<div className='auth__form-container_fields-account'>
-						<p>
-							{isSignup ? 'Уже есть аккаунт?' : 'У вас нет учетной записи?'}
-							<span onClick={switchMode}>
-								{isSignup ? 'Войти' : 'Регистрация'}
-							</span>
-						</p>
-					</div>
 				</div>
 			</div>
 			<div className='auth__form-container_image'>
