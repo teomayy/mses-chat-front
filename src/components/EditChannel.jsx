@@ -49,7 +49,7 @@ const EditChannel = ({ setIsEditing }) => {
 	}
 
 	return (
-		<div className='edi-channel__container'>
+		<div className='edit-channel__container'>
 			<div className='edit-channel__header'>
 				<p>Edit channel</p>
 				<CloseCreateChannel setIsEditing={setIsEditing} />
@@ -60,9 +60,7 @@ const EditChannel = ({ setIsEditing }) => {
 			/>
 			<UserList setSelectedUsers={setSelectedUsers} />
 			<div className='edit-channel__button-wrapper'>
-				<p className='edit-channel__button-wrapper' onClick={updateChannel}>
-					Сохранить
-				</p>
+				<p onClick={updateChannel}>Сохранить</p>
 			</div>
 		</div>
 	)

@@ -1,7 +1,9 @@
 import React from 'react'
+import { Message, useMessageContext } from 'stream-chat-react'
 
 const TeamMessage = () => {
-	return <div>TeamMessage</div>
+	const { message } = useMessageContext
+	return <Message message={{ ...message, user: {} }} />
 }
 
 export default TeamMessage
