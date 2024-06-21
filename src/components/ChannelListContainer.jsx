@@ -58,6 +58,7 @@ const ChannelListContent = ({
 		cookies.remove('token')
 		cookies.remove('userId')
 		cookies.remove('username')
+		cookies.remove('fullName')
 		cookies.remove('hashedPassword')
 		cookies.remove('phoneNumber')
 

@@ -7,6 +7,7 @@ import CustomPhoneInput from './CustomPhoneInput'
 const cookies = new Cookies()
 
 const initialState = {
+	fullName: '',
 	username: '',
 	password: '',
 	phoneNumber: '',
@@ -48,7 +49,7 @@ const Auth = () => {
 		e.preventDefault()
 		const { username, password, phoneNumber } = form
 
-		const URL = 'https://mses-chat.uz:8444/auth'
+		const URL = 'http://localhost:8444/auth'
 
 		try {
 			const response = await axios.post(
@@ -56,14 +57,16 @@ const Auth = () => {
 				{
 					username,
 					password,
+					fullName: form.fullName,
 					phoneNumber,
 				}
 			)
 
-			const { token, userId, hashedPassword } = response.data
+			const { token, userId, hashedPassword, fullName } = response.data
 
 			cookies.set('token', token)
 			cookies.set('username', username)
+			cookies.set('fullName', fullName)
 			cookies.set('userId', userId)
 
 			if (isSignup) {
@@ -83,15 +86,17 @@ const Auth = () => {
 
 	const handleSendOtp = async () => {
 		try {
-			const res = await axios.post('https://mses-chat.uz:8444/auth/send-otp', {
+			const res = await axios.post('http://localhost:8444/auth/send-otp', {
 				phoneNumber: form.phoneNumber,
 			})
 
 			if (res.data.success) {
 				setIsOtpSent(true)
 				alert('OTP sent!')
+			} else {
 			}
 		} catch (error) {
+			setErrorMessage(error.response.data.message)
 			console.error('Error sending OTP', error)
 		}
 	}
@@ -99,7 +104,7 @@ const Auth = () => {
 	const handleSendResetOtp = async () => {
 		try {
 			const res = await axios.post(
-				'https://mses-chat.uz:8444/auth/send-reset-otp',
+				'http://localhost:8444/auth/send-reset-otp',
 				{
 					phoneNumber: form.phoneNumber,
 				}
@@ -108,9 +113,14 @@ const Auth = () => {
 			if (res.data.success) {
 				setIsOtpSent(true)
 				alert('OTP sent!')
+			} else {
+				setErrorMessage(res.data.message)
 			}
 		} catch (error) {
-			console.error('Error sending OTP', error)
+			if (error.response && error.response.data) {
+			} else {
+				console.error('Error sending OTP', error)
+			}
 		}
 	}
 
@@ -118,7 +128,7 @@ const Auth = () => {
 		console.log('Before sending request')
 		try {
 			const response = await axios.post(
-				'https://mses-chat.uz:8444/auth/verify-otp',
+				'http://localhost:8444/auth/verify-otp',
 				{
 					phoneNumber: form.phoneNumber,
 					otp,
@@ -138,7 +148,7 @@ const Auth = () => {
 	const handleResetPassword = async () => {
 		try {
 			const response = await axios.post(
-				'https://mses-chat.uz:8444/auth/reset-password',
+				'http://localhost:8444/auth/reset-password',
 				{
 					phoneNumber: form.phoneNumber,
 					otp,
@@ -253,6 +263,19 @@ const Auth = () => {
 							</>
 						) : (
 							<>
+								{isSignup && (
+									<div className='auth__form-container_fields-content_input'>
+										<label htmlFor='fullName'>Ф.И.О</label>
+										<input
+											name='fullName'
+											type='text'
+											placeholder='Ф.И.О'
+											value={form.fullName}
+											onChange={handleChange}
+											required
+										/>
+									</div>
+								)}
 								<div className='auth__form-container_fields-content_input'>
 									<label htmlFor='username'>Имя пользователя</label>
 									<input
@@ -261,6 +284,7 @@ const Auth = () => {
 										name='username'
 										value={form.username}
 										onChange={handleChange}
+										required
 									/>
 								</div>
 								<div className='auth__form-container_fields-content_input'>
@@ -271,6 +295,7 @@ const Auth = () => {
 										name='password'
 										value={form.password}
 										onChange={handleChange}
+										required
 									/>
 								</div>
 								<div className='auth__form-container_fields-content_button'>
@@ -283,7 +308,7 @@ const Auth = () => {
 										{isSignup
 											? 'Уже есть аккаунт?'
 											: 'У вас нет учетной записи?'}
-										<span onClick={switchMode}>
+										<span className='reg_button' onClick={switchMode}>
 											{isSignup ? 'Войти' : 'Регистрация'}
 										</span>
 									</p>
