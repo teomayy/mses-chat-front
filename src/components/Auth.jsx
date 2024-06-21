@@ -49,7 +49,7 @@ const Auth = () => {
 		e.preventDefault()
 		const { username, password, phoneNumber } = form
 
-		const URL = 'http://localhost:8444/auth'
+		const URL = 'https://mses-chat.uz:8444/auth'
 
 		try {
 			const response = await axios.post(
@@ -86,7 +86,7 @@ const Auth = () => {
 
 	const handleSendOtp = async () => {
 		try {
-			const res = await axios.post('http://localhost:8444/auth/send-otp', {
+			const res = await axios.post('https://mses-chat.uz:8444/auth/send-otp', {
 				phoneNumber: form.phoneNumber,
 			})
 
@@ -104,7 +104,7 @@ const Auth = () => {
 	const handleSendResetOtp = async () => {
 		try {
 			const res = await axios.post(
-				'http://localhost:8444/auth/send-reset-otp',
+				'https://mses-chat.uz:8444/auth/send-reset-otp',
 				{
 					phoneNumber: form.phoneNumber,
 				}
@@ -128,7 +128,7 @@ const Auth = () => {
 		console.log('Before sending request')
 		try {
 			const response = await axios.post(
-				'http://localhost:8444/auth/verify-otp',
+				'https://mses-chat.uz:8444/auth/verify-otp',
 				{
 					phoneNumber: form.phoneNumber,
 					otp,
@@ -148,7 +148,7 @@ const Auth = () => {
 	const handleResetPassword = async () => {
 		try {
 			const response = await axios.post(
-				'http://localhost:8444/auth/reset-password',
+				'https://mses-chat.uz:8444/auth/reset-password',
 				{
 					phoneNumber: form.phoneNumber,
 					otp,
