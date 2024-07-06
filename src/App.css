@@ -156,6 +156,33 @@ body {
 	font-weight: 700;
 }
 
+.error-popup {
+	padding: 20px 20px;
+	background-color: #ededf0 !important;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	color: #795a06;
+	border-radius: 8px;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+	text-align: center;
+	z-index: 1000;
+}
+
+.error-popup button {
+	border-radius: 4px;
+	background: #ff3300;
+	border: 1px solid #ff3300;
+	color: #fff;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: 900;
+	padding: 0.7rem 1.2rem;
+	outline: none;
+	cursor: pointer;
+	transition: 0.3s ease;
+}
+
 @media screen and (max-width: 800px) {
 	.auth__form-container {
 		flex-direction: column-reverse;

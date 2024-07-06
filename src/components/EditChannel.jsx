@@ -24,8 +24,8 @@ const ChannelNameInput = ({ channelName = '', setChannelName }) => {
 }
 const EditChannel = ({ setIsEditing }) => {
 	const { channel } = useChatContext()
-	const { channelName, setChannelName } = useState(channel?.data?.name || '')
-	const { selectedUsers, setSelectedUsers } = useState([])
+	const [channelName, setChannelName] = useState(channel?.data?.name || '')
+	const [selectedUsers, setSelectedUsers] = useState([])
 
 	useEffect(() => {
 		if (channel?.data?.name) {
