@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useChatContext } from 'stream-chat-react'
 import { UserList } from './'
 
@@ -24,8 +24,14 @@ const ChannelNameInput = ({ channelName = '', setChannelName }) => {
 }
 const EditChannel = ({ setIsEditing }) => {
 	const { channel } = useChatContext()
-	const { channelName, setChannelName } = useState(channel?.data?.name)
+	const { channelName, setChannelName } = useState(channel?.data?.name || '')
 	const { selectedUsers, setSelectedUsers } = useState([])
+
+	useEffect(() => {
+		if (channel?.data?.name) {
+			setChannelName(channel.data.name)
+		}
+	}, [channel])
 
 	const updateChannel = async event => {
 		event.preventDefault()
