@@ -49,7 +49,7 @@ const EditChannel = ({ setIsEditing }) => {
 			await channel.addMembers(selectedUsers)
 		}
 
-		setChannelName(null)
+		setChannelName('')
 		setIsEditing(false)
 		setSelectedUsers([])
 	}
