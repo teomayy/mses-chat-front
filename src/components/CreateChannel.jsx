@@ -17,6 +17,7 @@ const ChannelNameInput = ({ channelName = '', setChannelName }) => {
 				value={channelName}
 				onChange={handleChange}
 				placeholder='название канала'
+				required
 			/>
 			<p>Добавить участников</p>
 		</div>
