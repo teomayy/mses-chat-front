@@ -24,13 +24,28 @@ const ChannelNameInput = ({ channelName = '', setChannelName }) => {
 	)
 }
 
+const ErrorPopup = ({ message, onClose }) => {
+	return (
+		<div className='error-popup'>
+			<p>{message}</p>
+			<button onClick={onClose}>Закрыть</button>
+		</div>
+	)
+}
+
 const CreateChannel = ({ createType, setIsCreating }) => {
 	const { client, setActiveChannel } = useChatContext()
 	const [selectedUsers, setSelectedUsers] = useState([client.userID || ''])
 	const [channelName, setChannelName] = useState('')
+	const [error, setError] = useState('')
 
 	const createChannel = async e => {
 		e.preventDefault()
+
+		if (!channelName) {
+			setError('Пожалуйста, введите название канала')
+			return
+		}
 
 		try {
 			const newChannel = await client.channel(createType, channelName, {
@@ -51,6 +66,7 @@ const CreateChannel = ({ createType, setIsCreating }) => {
 
 	return (
 		<div className='create-channel___container'>
+			{error && <ErrorPopup message={error} onClose={() => setError('')} />}
 			<div className='create-channel__header'>
 				<p>
 					{createType === 'team'
